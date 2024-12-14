@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agomo🔥</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            height: 100vh;
+            background: linear-gradient(135deg, #9370DB, #7B68EE);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .music-container {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: bisque;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        audio {
+            width: 100%;
+            margin: 20px 0;
+            outline: none;
+        }
+
+        .lyrics-container {
+            max-height: 150px; /* Membatasi tinggi lirik yang dapat discroll */
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            background-size: cover; /* Make the image cover the container */
+            border-radius: 10px;
+            text-align: left;
+            color: #fff;
+            line-height: 1.8;
+            font-size: 0.9rem; /* Ukuran teks yang lebih kecil */
+        }
+
+        .lyrics-container span {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            color: fuchsia;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="music-container">
+        <h1>Gus dur <br> -Eny Sagita-</h1>
+        <audio id="audio" controls>
+            <source src="Agomo.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="lyrics-container" id="lyrics">
+            <span data-time="0" data-duration="10">Nadyan cacat netramu nanging ngerti batinmu</span>
+            <span data-time="8" data-duration="10">ngendi kucing, ngendi asu</span>
+            <span data-time="14" data-duration="10">LSM opo partai Ormas opo mung RT</span>
+            <span data-time="19" data-duration="5">Sing penting tumindak e...</span>
+            <span data-time="25" data-duration="10">Kelingan welingmu sing prasojo</span>
+            <span data-time="37" data-duration="10">Agomo ngayomi jagad royoo...</span>
+            <span data-time="48" data-duration="10">...</span>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const lyrics = document.getElementById('lyrics');
+        const lines = lyrics.querySelectorAll('span');
+
+        let currentLineIndex = -1; // Melacak indeks lirik yang sedang aktif
+
+        audio.addEventListener('timeupdate', () => {
+            const currentTime = audio.currentTime;
+
+            // Cari lirik yang sesuai dengan waktu saat ini
+            lines.forEach((line, index) => {
+                const lineTime = parseFloat(line.getAttribute('data-time'));
+                const duration = parseFloat(line.getAttribute('data-duration')) || 0; // Ambil durasi lirik, default 0
+
+                // Pastikan waktu audio berada di antara waktu mulai lirik dan waktu berakhirnya (berdasarkan durasi)
+                if (currentTime >= lineTime && currentTime < lineTime + duration && currentLineIndex !== index) {
+                    lines.forEach(l => l.classList.remove('highlight')); // Hapus highlight dari semua lirik
+                    line.classList.add('highlight'); // Tambahkan highlight pada lirik aktif
+                    currentLineIndex = index; // Simpan indeks lirik yang aktif
+                }
+            });
+        });
+    </script>
+</body>
+</html>
