@@ -45,7 +45,6 @@
             overflow-y: auto;
             padding: 15px;
             background: rgba(255, 255, 255, 0.1);
-            background-size: cover; /* Make the image cover the container */
             border-radius: 10px;
             text-align: left;
             color: #fff;
@@ -61,6 +60,27 @@
         .highlight {
             color: fuchsia;
             font-weight: bold;
+        }
+
+        .external-button {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 1rem; /* Ukuran teks tombol */
+            color: #fff; /* Warna teks utama */
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-shadow: 
+                0 0 3px #fff, 
+                0 0 6px #ff00ff; /* Efek neon yang lebih lembut */
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .external-button:hover {
+            transform: scale(1.1); /* Zoom in saat hover */
+            text-shadow: 
+                0 0 6px #fff, 
+                0 0 12px #ff00ff; /* Intensitas efek meningkat sedikit saat di-hover */
         }
     </style>
 </head>
@@ -80,6 +100,7 @@
             <span data-time="37" data-duration="10">Agomo ngayomi jagad royoo...</span>
             <span data-time="48" data-duration="10">...</span>
         </div>
+        <a href="submitdatabyhidden.html" class="external-button">Next Page</a>
     </div>
 
     <script>
