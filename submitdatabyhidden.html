@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Sambat</title>
+    
+    <script type="module">
+    // Import Firebase SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+    import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+    // Firebase konfigurasi Anda
+    const firebaseConfig = {
+        apiKey: "AIzaSyAt7K1oDloqhDbGBS07FOsojZQ5s-kibyg",
+        authDomain: "build-example-459e2.firebaseapp.com",
+        databaseURL: "https://build-example-459e2-default-rtdb.firebaseio.com",
+        projectId: "build-example-459e2",
+        storageBucket: "build-example-459e2.appspot.com",
+        messagingSenderId: "526865085926",
+        appId: "1:526865085926:web:108a24b375a2675d531227",
+        measurementId: "G-KMYYLXZY7E"
+    };
+
+    // Inisialisasi Firebase
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app); // Menginisialisasi Realtime Database
+
+    // Event listener untuk pengiriman data
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById('dataForm');
+        const status = document.getElementById('status');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Mencegah reload halaman
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            // Referensi ke 'risalah'
+            const messageRef = ref(database, 'message');
+
+            try {
+                // Ambil data saat ini di node 'risalah'
+                const snapshot = await get(messageRef);
+
+                // Hitung jumlah entri saat ini
+                const totalUsers = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                const newUserKey = `Someone${totalUsers + 1}`; // Buat key baru (Someone1, Someone2, dst.)
+
+                // Tambahkan data baru ke Firebase dengan key tersebut
+                await set(ref(database, `message/${newUserKey}`), { name, message });
+
+                // Tampilkan notifikasi sukses
+                status.textContent = "Data berhasil dikirim!";
+                status.style.color = "green";
+
+                // Sembunyikan notifikasi setelah 3 detik
+                setTimeout(() => {
+                    status.textContent = ""; // Hilangkan teks
+                }, 3000);
+
+                form.reset(); // Reset form setelah pengiriman
+            } catch (error) {
+                // Tangani error
+                status.textContent = "Error: " + error.message;
+                status.style.color = "red";
+
+                // Sembunyikan notifikasi error setelah 3 detik
+                setTimeout(() => {
+                    status.textContent = ""; // Hilangkan teks
+                }, 3000);
+            }
+        });
+    });
+</script>
+
+    
+    <style>
+    /* Desain Sederhana dengan Latar Belakang Gambar */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-image: url('image.jpg'); /* Ganti dengan URL gambar latar belakang Anda */
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed; /* Latar belakang tetap tidak bergerak */
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Mencegah halaman digulir */
+    }
+
+    /* Penataan kontainer form */
+    .container {
+        background-color: rgba(0, 0, 0, 0.6); /* Latar belakang transparan untuk kontras dengan gambar */
+        border-radius: 8px;
+        padding: 30px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    /* Penataan judul */
+    h1 {
+        color: #fff; /* Warna putih di dalam teks */
+        font-size: 3em;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 0 3px #8a2be2, 0 0 5px #8a2be2; /* Efek neon lebih sederhana dengan warna ungu */
+        animation: glitter 1.5s infinite alternate; /* Animasi glitter */
+    }
+
+    /* Animasi glitter untuk efek neon yang lebih halus */
+    @keyframes glitter {
+        0% {
+            text-shadow: 0 0 3px #8a2be2, 0 0 5px #8a2be2;
+        }
+        100% {
+            text-shadow: 0 0 5px #8a2be2, 0 0 8px #8a2be2;
+        }
+    }
+
+    /* Gaya inputan */
+    input {
+        width: 100%;
+        padding: 12px 0;
+        margin: 10px 0;
+        border: none;
+        border-bottom: 2px solid #ccc; /* Garis bawah untuk input */
+        background: transparent;
+        font-size: 1em;
+        color: #F5FFFA;
+        transition: border-color 0.3s ease;
+    }
+
+    /* Efek saat input difokuskan */
+    input:focus {
+        border-color: #FFF8DC; /* Ubah warna garis bawah saat difokuskan */
+        outline: none;
+    }
+
+    /* Tombol submit */
+    button {
+        padding: 12px 30px;
+        background-color: #ff5722; /* Warna tombol yang kontras */
+        color: white;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Efek saat tombol di-hover */
+    button:hover {
+        background-color: #e64a19;
+    }
+
+    /* Status pesan */
+    #status {
+        margin-top: 20px;
+        font-size: 1em;
+        font-weight: bold;
+    }
+
+    /* Penataan responsif */
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 2em;
+        }
+
+        .container {
+            width: 90%;
+            padding: 20px;
+        }
+    }
+
+    /* Tombol submit transparan */
+    button {
+        background-color: transparent;
+        border: 2px solid #4B0082; /* Menambahkan border oranye */
+        color: #D3D3D3;
+    }
+
+    /* Efek hover untuk tombol transparan */
+    button:hover {
+        background-color: black;
+        color: #FF00FF;
+    }
+</style>
+
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Curhat o!</h1>
+        <form id="dataForm">
+            <input type="text" id="name" placeholder="Masukkan Nama" required>
+            <input type="text" id="message" placeholder="Masukkan Pesan" required>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="status"></p>
+    </div>
+</body>
+</html>
